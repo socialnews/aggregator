@@ -2,7 +2,7 @@
 
 var express = require('express');
 var shares = require('./routes/shares.js');
-var app = express();
+var app = exports.app = express();
 
 app.use('/shares', shares);
 
