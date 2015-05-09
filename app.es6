@@ -4,7 +4,7 @@ let app = exports.app = express();
 
 app.use('/shares', shares ); 
 
-let server = app.listen(3000,  () => {
+let server = exports.server = app.listen(3000,  () => {
 
 	let host = server.address().address;
 	let port = server.address().port;
