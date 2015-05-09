@@ -2,10 +2,18 @@ let should = require('should');
 let request = require('supertest');
 let app = require('../app.js').app;
 let server = require('../app.js').server;
+let mongoose = require('mongoose');
 
 
 
 describe('POST /shares', () =>{
+
+  before((done) => {
+    //Another possibility is to check if mongoose.connection.readyState equals 1
+    if (mongoose.connection.db) return done();
+    mongoose.connect('mongodb://localhost/test', done);
+  });
+
   it('respond with json', (done) =>{
     request(app)
       .post('/shares')

@@ -1,16 +1,15 @@
+let mongoose   = require('mongoose');
 let express = require('express');
 let shares = require('./routes/shares.js');
 let app = express();
 
 let bodyParser = require('body-parser')
-let multer = require('multer'); 
 
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: false })); // for parsing application/x-www-form-urlencoded
-app.use(multer()); // for parsing multipart/form-data
+
 app.use('/shares', shares );
 
-let server = exports.server = app.listen(3000,  () => {
+let server = app.listen(3000,  () => {
 
 	let host = server.address().address;
 	let port = server.address().port;
@@ -19,7 +18,11 @@ let server = exports.server = app.listen(3000,  () => {
 
 });
 
+if (!mongoose.connection.db) {
+  mongoose.connect(url);
+}
 
 exports.app = app;
+exports.server = server;
 
 
