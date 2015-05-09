@@ -1,8 +1,14 @@
 let express = require('express');
 let shares = require('./routes/shares.js');
-let app = exports.app = express();
+let app = express();
 
-app.use('/shares', shares ); 
+let bodyParser = require('body-parser')
+let multer = require('multer'); 
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: false })); // for parsing application/x-www-form-urlencoded
+app.use(multer()); // for parsing multipart/form-data
+app.use('/shares', shares );
 
 let server = exports.server = app.listen(3000,  () => {
 
@@ -13,5 +19,7 @@ let server = exports.server = app.listen(3000,  () => {
 
 });
 
+
+exports.app = app;
 
 
