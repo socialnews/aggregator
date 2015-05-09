@@ -23,16 +23,28 @@ let ShareSchema = new Schema({
 	created_at: {
 		type: String,
 		required: 'created_at must not be blank'
-	},
+	}
 
 })
 
-
 let Share = mongoose.model('Share', ShareSchema);
+BBPromise.promisifyAll(Share);
+BBPromise.promisifyAll(Share.prototype);
+exports.name = 'Share';
+exports.model = Share;
 
-let share = new Share({ name: 'Zildjian' });
+
+let share = new Share({ 
+	editor: "Piet",
+	provider: "Twitter",
+	link: "somewhere.com",
+	created_at: "now" 
+ });
+
 share.save(function (err) {
-  if (err){} // ...
+  if (err){
+  	console.log('Blowout')
+  }
 
   else{
   	Share.find(function (err, share) {
@@ -42,11 +54,3 @@ share.save(function (err) {
   	})
   }
 });
-
-let Share = mongoose.model('Share');
-BBPromise.promisifyAll(Share);
-BBPromise.promisifyAll(Share.prototype);
-exports.name = 'Share';
-exports.model = Share;
-
-
