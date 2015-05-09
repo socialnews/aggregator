@@ -1,23 +1,52 @@
 let mongoose = require('mongoose');
+// var timestamps = require('mongoose-timestamp');
+let BBPromise = require('bluebird');
+
+let Schema = mongoose.Schema;
 mongoose.connect('mongodb://localhost/test');
 
-let Cat = mongoose.model('Cat', { name: String });
+let ShareSchema = new Schema({
+	schemaVersion: String,
 
-let kitty = new Cat({ name: 'Zildjian' });
-kitty.save(function (err) {
-  if (err) // ...
-  	console.log('meow');
+	editor: {
+		type: String,
+		required: 'Editors must have a name'
+	},
+	provider: {
+		type: String,
+		required: 'Provider must not be blank'
+	},
+	link: {
+		type: String,
+		required: 'links must not be blank'
+	},
+	created_at: {
+		type: String,
+		required: 'created_at must not be blank'
+	},
+
+})
+
+
+let Share = mongoose.model('Share', ShareSchema);
+
+let share = new Share({ name: 'Zildjian' });
+share.save(function (err) {
+  if (err){} // ...
+
   else{
-  	console.log('weee');
-  	Cat.find(function (err, cat) {
+  	Share.find(function (err, share) {
   	  if (err) return console.error(err);
-  	  console.log(cat)
+  	  console.log(share)
   	  mongoose.disconnect();
   	})
   }
-
-
 });
 
+let Share = mongoose.model('Share');
+BBPromise.promisifyAll(Share);
+BBPromise.promisifyAll(Share.prototype);
+exports.name = 'Share';
+exports.model = Share;
 
 
