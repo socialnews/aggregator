@@ -1,8 +1,6 @@
 let mongoose = require('mongoose');
 let BBPromise = require('bluebird');
-
 let Schema = mongoose.Schema;
-// mongoose.connect('mongodb://localhost/test');
 
 let ShareSchema = new Schema({
 	schemaVersion: String,
@@ -33,23 +31,4 @@ exports.name = 'Share';
 exports.model = Share;
 
 
-// let share = new Share({ 
-// 	editor: "Piet",
-// 	provider: "Twitter",
-// 	link: "somewhere.com",
-// 	created_at: "now" 
-//  });
 
-// share.save(function (err) {
-//   if (err){
-//   	console.log('Blowout')
-//   }
-
-//   else{
-//   	Share.find(function (err, share) {
-//   	  if (err) return console.error(err);
-//   	  console.log(share)
-//   	  mongoose.disconnect();
-//   	})
-//   }
-// });

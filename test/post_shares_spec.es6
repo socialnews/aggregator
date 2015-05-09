@@ -27,7 +27,7 @@ describe('POST /shares', () =>{
       'provider': 'twitter',
       'link' : 'http://somewhere.com',
       'editor' : 'pietgeursen',
-      'shared_at': 'now'
+      'created_at': 'now'
       }
     request(app)
       .post('/shares')

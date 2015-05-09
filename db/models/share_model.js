@@ -2,9 +2,7 @@
 
 var mongoose = require('mongoose');
 var BBPromise = require('bluebird');
-
 var Schema = mongoose.Schema;
-// mongoose.connect('mongodb://localhost/test');
 
 var ShareSchema = new Schema({
 	schemaVersion: String,
@@ -28,37 +26,8 @@ var ShareSchema = new Schema({
 
 });
 
-// process.on('SIGINT', () => { 
-//   mongoose.connection.close( () => {
-//     console.log('Mongoose default connection disconnected through app termination');
-//     process.exit(0);
-//   });
-// });
-
 var Share = mongoose.model('Share', ShareSchema);
-// BBPromise.promisifyAll(Share);
-// BBPromise.promisifyAll(Share.prototype);
-// exports.name = 'Share';
-// exports.model = Share;
-exports.share = Share;
-
-// let share = new Share({
-// 	editor: "Piet",
-// 	provider: "Twitter",
-// 	link: "somewhere.com",
-// 	created_at: "now"
-//  });
-
-// share.save(function (err) {
-//   if (err){
-//   	console.log('Blowout')
-//   }
-
-//   else{
-//   	Share.find(function (err, share) {
-//   	  if (err) return console.error(err);
-//   	  console.log(share)
-//   	  mongoose.disconnect();
-//   	})
-//   }
-// });
+BBPromise.promisifyAll(Share);
+BBPromise.promisifyAll(Share.prototype);
+exports.name = 'Share';
+exports.model = Share;
