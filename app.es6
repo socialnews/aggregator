@@ -1,10 +1,16 @@
 let express = require('express');
 let shares = require('./routes/shares.js');
-let app = exports.app = express();
+let app = express();
 
-app.use('/shares', shares ); 
+let bodyParser = require('body-parser')
+let multer = require('multer'); 
 
-let server = app.listen(3000,  () => {
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: false })); // for parsing application/x-www-form-urlencoded
+app.use(multer()); // for parsing multipart/form-data
+app.use('/shares', shares );
+
+let server = exports.server = app.listen(3000,  () => {
 
 	let host = server.address().address;
 	let port = server.address().port;
@@ -13,5 +19,7 @@ let server = app.listen(3000,  () => {
 
 });
 
+
+exports.app = app;
 
 
