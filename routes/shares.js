@@ -9,7 +9,9 @@ router.post('/', function (req, res) {
 
 	console.log(req.body);
 
-	share.add(req.body, function (share) {
+	share.add(req.body, function (err) {
+
+		if
 		console.log('saved share to db: ', share);
 		res.json(share);
 	});
