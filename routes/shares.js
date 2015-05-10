@@ -7,13 +7,8 @@ var mongoose = require('mongoose');
 
 router.post('/', function (req, res) {
 
-	console.log(req.body);
-
-	share.add(req.body, function (err) {
-
-		if
-		console.log('saved share to db: ', share);
-		res.json(share);
+	share.add(req.body).spread(function (saved_share) {
+		res.json(saved_share);
 	});
 });
 
