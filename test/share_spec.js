@@ -25,7 +25,7 @@ describe('Shares', function () {
 	describe('Share#add', function () {
 
 		it('creates a new share in the database', function (done) {
-			share.add(data).spread(function (saved_share) {
+			share.add(data).then(function (saved_share) {
 				done();
 			});
 		});
@@ -40,12 +40,13 @@ describe('Shares', function () {
 	describe('Share#getByArticle', function () {
 
 		it('finds a share by article', function (done) {
-			share.add(data).spread(function (saved_share) {
+			share.add(data).then(function (saved_share) {
 				share.getByArticle(data.link).spread(function (shares) {
-					shares.link.should.be.equal(shares.link);
-					shares.provider.should.be.equal(shares.provider);
-					shares.editor.should.be.equal(shares.editor);
-					shares.created_at.should.be.equal(shares.created_at);
+
+					saved_share.link.should.be.equal(shares.link);
+					saved_share.provider.should.be.equal(shares.provider);
+					saved_share.editor.should.be.equal(shares.editor);
+					saved_share.created_at.should.be.equal(shares.created_at);
 					done();
 				});
 			});

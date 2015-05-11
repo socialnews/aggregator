@@ -2,12 +2,14 @@
 
 var BBPromise = require('bluebird');
 var mongoose = require('mongoose');
+var mongo = BBPromise.promisifyAll(require('mongodb'));
+var MongoClient = mongo.MongoClient;
 
 var shareSchema = require('./models/share_model').model;
 
 var addShare = function addShare(share) {
 
-	return new shareSchema(share).saveAsync();
+	return mongoose.model('Share').createAsync(share);
 };
 
 var getByArticle = function getByArticle(article) {

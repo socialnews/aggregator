@@ -18,7 +18,7 @@ describe('POST /shares', function () {
 
   var addSpy = undefined;
 
-  it('respond with json', function (done) {
+  it('responds with json', function (done) {
     addSpy = simple.mock(share, 'add').resolveWith([data]);
     request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/).expect(200, done);
   });
@@ -31,8 +31,7 @@ describe('POST /shares', function () {
   it('rejects a json request with incorrect params', function (done) {
     var data = {
       'provider': 'twitter' };
-    //Even though this uses a 'resolve', a single argument will be handled as an error. An array ends up being a success  
-    addSpy = simple.mock(share, 'add').resolveWith('error');
+    addSpy = simple.mock(share, 'add').rejectWith('error');
     request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/).expect(400, done);
   });
 

@@ -1,6 +1,7 @@
 let mongoose   = require('mongoose');
 let express = require('express');
 let shares = require('./routes/shares.js');
+let article = require('./routes/article.js');
 let app = express();
 
 let url = 'mongodb://localhost/test'
@@ -10,6 +11,7 @@ let bodyParser = require('body-parser')
 app.use(bodyParser.json()); // for parsing application/json
 
 app.use('/shares', shares );
+app.use('/article', article );
 
 let server = app.listen(3000,  () => {
 

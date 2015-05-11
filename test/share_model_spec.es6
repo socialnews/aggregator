@@ -26,7 +26,7 @@ describe('Shares', () =>{
 
 		it('creates a new share in the database', (done) =>{
 			share.add(data)
-			.spread((saved_share) => {
+			.then((saved_share) => {
 				done();
 			})
 		})
@@ -44,12 +44,13 @@ describe('Shares', () =>{
 	describe('Share#getByArticle',  () => {
 
 		it('finds a share by article',  (done) => {
-			share.add(data).spread( (saved_share) => {
+			share.add(data).then( (saved_share) => {
 				share.getByArticle(data.link).spread ((shares) =>{
-					(shares.link).should.be.equal(shares.link);
-					(shares.provider).should.be.equal(shares.provider);
-					(shares.editor).should.be.equal(shares.editor);
-					(shares.created_at).should.be.equal(shares.created_at);
+
+					(saved_share.link).should.be.equal(shares.link);
+					(saved_share.provider).should.be.equal(shares.provider);
+					(saved_share.editor).should.be.equal(shares.editor);
+					(saved_share.created_at).should.be.equal(shares.created_at);
 					done();
 				})
 			})
@@ -72,7 +73,7 @@ describe('Shares', () =>{
 	})
 
 	afterEach((done) =>{
-		mongoose.connection.collections['shares'].drop(function (err) {
+		mongoose.connection.collections['shares'].drop( (err) => {
 			done();
 		});
 	})	

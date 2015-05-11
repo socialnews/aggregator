@@ -17,7 +17,7 @@ describe('POST /shares', () =>{
 
   let addSpy;
 
-  it('respond with json', (done) =>{
+  it('responds with json', (done) =>{
     addSpy = simple.mock(share, 'add').resolveWith([data]);
     request(app)
       .post('/shares')
@@ -41,8 +41,7 @@ describe('POST /shares', () =>{
     let data = {
       'provider': 'twitter',
       }
-    //Even though this uses a 'resolve', a single argument will be handled as an error. An array ends up being a success   
-    addSpy = simple.mock(share, 'add').resolveWith('error')     
+    addSpy = simple.mock(share, 'add').rejectWith('error')     
     request(app)
       .post('/shares')
       .set('Accept', 'application/json')
