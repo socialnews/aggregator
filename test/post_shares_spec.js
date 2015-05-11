@@ -16,23 +16,25 @@ describe('POST /shares', function () {
     'created_at': 'now'
   };
 
-  var addSpy = undefined;
+  var postToShares = function postToShares() {
+    return request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/);
+  };
 
   it('responds with json', function (done) {
-    addSpy = simple.mock(share, 'add').resolveWith([data]);
-    request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/).expect(200, done);
+    var addSpy = simple.mock(share, 'add').resolveWith([data]);
+    postToShares().expect(200, done);
   });
 
   it('accepts a json request with params of provider, link, editor, shared_at', function (done) {
-    addSpy = simple.mock(share, 'add').resolveWith([data]);
-    request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/).expect(200, done);
+    var addSpy = simple.mock(share, 'add').resolveWith([data]);
+    postToShares().expect(200, done);
   });
 
   it('rejects a json request with incorrect params', function (done) {
     var data = {
       'provider': 'twitter' };
-    addSpy = simple.mock(share, 'add').rejectWith('error');
-    request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/).expect(400, done);
+    var addSpy = simple.mock(share, 'add').rejectWith('error');
+    postToShares().expect(400, done);
   });
 
   after(function (done) {

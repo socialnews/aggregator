@@ -15,25 +15,23 @@ describe('POST /shares', () =>{
     'created_at': 'now'
     }
 
-  let addSpy;
-
-  it('responds with json', (done) =>{
-    addSpy = simple.mock(share, 'add').resolveWith([data]);
-    request(app)
+  let postToShares = () =>{
+    return request(app)
       .post('/shares')
       .set('Accept', 'application/json')
       .send(data)
       .expect('Content-Type', /json/)
+  }
+
+  it('responds with json', (done) =>{
+    let addSpy = simple.mock(share, 'add').resolveWith([data]);
+    postToShares()
       .expect(200, done);
   })
 
   it('accepts a json request with params of provider, link, editor, shared_at', (done) =>{
-    addSpy = simple.mock(share, 'add').resolveWith([data])
-    request(app)
-      .post('/shares')
-      .set('Accept', 'application/json')
-      .send(data)
-      .expect('Content-Type', /json/)
+    let addSpy = simple.mock(share, 'add').resolveWith([data])
+    postToShares()
       .expect(200,done);
   })
 
@@ -41,15 +39,10 @@ describe('POST /shares', () =>{
     let data = {
       'provider': 'twitter',
       }
-    addSpy = simple.mock(share, 'add').rejectWith('error')     
-    request(app)
-      .post('/shares')
-      .set('Accept', 'application/json')
-      .send(data)
-      .expect('Content-Type', /json/)
+    let addSpy = simple.mock(share, 'add').rejectWith('error')     
+    postToShares()
       .expect(400, done);
   })
-
 
   after( done =>{
     simple.restore();

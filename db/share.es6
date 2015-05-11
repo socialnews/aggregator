@@ -6,14 +6,12 @@ let MongoClient = mongo.MongoClient;
 let shareSchema = require('./models/share_model').model;
 
 let addShare = (share) => {
-
 	return  mongoose.model('Share')
 		.createAsync(share);
 }
 
 
 let getByArticle = (article) => {
-
 	return mongoose.model('Share')
 		.findAsync({link: article});
 }

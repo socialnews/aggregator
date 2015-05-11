@@ -19,16 +19,20 @@ describe('GET /article?url=some-urlencoded-url', function () {
 
   var query = { url: 'http%3A%2F%2Fmongoosejs.com%2Fdocs%2Fmodels.html' };
 
-  var getByArticleSpy = undefined;
+  var getShareByArticle = function getShareByArticle() {
+    return request(app).get('/article').set('Accept', 'application/json').query(query).expect('Content-Type', /json/);
+  };
 
   it('responds with json', function (done) {
-    getByArticleSpy = simple.mock(share, 'getByArticle').resolveWith([data]);
-    request(app).get('/article').set('Accept', 'application/json').query(query).expect('Content-Type', /json/).expect(200, done);
+    var getByArticleSpy = simple.mock(share, 'getByArticle').resolveWith([data]);
+
+    getShareByArticle().expect(200, done);
   });
 
   it('expects a query string where {url: encoded_url} ', function (done) {
-    getByArticleSpy = simple.mock(share, 'getByArticle').resolveWith([data]);
-    request(app).get('/article').set('Accept', 'application/json').query(query).expect('Content-Type', /json/).expect(200, function () {
+    var getByArticleSpy = simple.mock(share, 'getByArticle').resolveWith([data]);
+
+    getShareByArticle().expect(200, function () {
       getByArticleSpy.lastCall.args[0].should.be.eql(decodeURIComponent(query.url));
       done();
     });
