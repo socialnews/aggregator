@@ -3,6 +3,7 @@
 var should = require('should');
 var share = require('../db/share.js');
 var mongoose = require('mongoose');
+var Promise = require('bluebird');
 
 describe('Shares', function () {
 
@@ -36,9 +37,43 @@ describe('Shares', function () {
 		});
 	});
 
+	describe('Share#getByArticle', function () {
+
+		it('finds a share by article', function (done) {
+			share.add(data).spread(function (saved_share) {
+				share.getByArticle(data.link).spread(function (shares) {
+					shares.link.should.be.equal(shares.link);
+					shares.provider.should.be.equal(shares.provider);
+					shares.editor.should.be.equal(shares.editor);
+					shares.created_at.should.be.equal(shares.created_at);
+					done();
+				});
+			});
+		});
+
+		it('finds a collection of shares by article', function (done) {
+
+			var shares = [data, data, data];
+
+			Promise.map(shares, function (data) {
+				return share.add(data);
+			}).then(function (savedShares) {
+				return share.getByArticle(data.link);
+			}).then(function (loadedShares) {
+				loadedShares.length.should.be.equal(shares.length);
+				done();
+			});
+		});
+	});
+
+	afterEach(function (done) {
+		mongoose.connection.collections['shares'].drop(function (err) {
+			done();
+		});
+	});
+
 	after(function (done) {
 		mongoose.connection.collections['shares'].drop(function (err) {
-			if (err) console.log('Got error trying to drop shares: ', err);
 
 			mongoose.connection.close(function () {
 				done();
