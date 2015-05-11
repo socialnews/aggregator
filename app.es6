@@ -25,8 +25,8 @@ if (!mongoose.connection.db) {
   	mongoose.connect(url);
 }
 
-let gracefulExit = function() { 
-  mongoose.connection.close(function () {
+let gracefulExit = () => { 
+  mongoose.connection.close( () => {
     console.log('Mongoose default connection with DB is disconnected through app termination');
     process.exit(0);
   });

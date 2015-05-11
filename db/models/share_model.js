@@ -26,7 +26,15 @@ var ShareSchema = new Schema({
 
 });
 
-var Share = mongoose.model('Share', ShareSchema);
+var Share = undefined;
+
+if (mongoose.models.Share) {
+	Share = mongoose.model('Share');
+} else {
+	Share = mongoose.model('Share', ShareSchema);
+}
+
+// let Share = mongoose.model('Share', ShareSchema);
 BBPromise.promisifyAll(Share);
 BBPromise.promisifyAll(Share.prototype);
 exports.name = 'Share';

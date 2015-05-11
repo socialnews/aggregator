@@ -7,8 +7,6 @@ var MongoClient = mongo.MongoClient;
 var shareSchema = require('./models/share_model').model;
 
 var addShare = function addShare(share) {
-  // connect to mongo
-  // mongoose.connect(url);
   return new shareSchema(share).saveAsync();
 };
 
