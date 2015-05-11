@@ -1,16 +1,17 @@
+let mongoose   = require('mongoose');
 let express = require('express');
 let shares = require('./routes/shares.js');
 let app = express();
 
+let url = 'mongodb://localhost/test'
+
 let bodyParser = require('body-parser')
-let multer = require('multer'); 
 
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: false })); // for parsing application/x-www-form-urlencoded
-app.use(multer()); // for parsing multipart/form-data
+
 app.use('/shares', shares );
 
-let server = exports.server = app.listen(3000,  () => {
+let server = app.listen(3000,  () => {
 
 	let host = server.address().address;
 	let port = server.address().port;
@@ -19,7 +20,23 @@ let server = exports.server = app.listen(3000,  () => {
 
 });
 
+if (!mongoose.connection.db) {
+	console.log('connecting to db...')
+  	mongoose.connect(url);
+}
+
+let gracefulExit = () => { 
+  mongoose.connection.close( () => {
+    console.log('Mongoose default connection with DB is disconnected through app termination');
+    process.exit(0);
+  });
+}
+ 
+// If the Node process ends, close the Mongoose connection
+process.on('SIGINT', gracefulExit).on('SIGTERM', gracefulExit);
+
 
 exports.app = app;
+exports.server = server;
 
 
