@@ -8,7 +8,7 @@ let simple = require('simple-mock');
 let share = require('../db/share.js');
 
 let Promise = require('bluebird');
-simple.Promise = require('bluebird');
+simple.Promise = Promise
 
 
 describe('POST /shares', () =>{

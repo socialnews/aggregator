@@ -9,7 +9,7 @@ var simple = require('simple-mock');
 var share = require('../db/share.js');
 
 var Promise = require('bluebird');
-simple.Promise = require('bluebird');
+simple.Promise = Promise;
 
 describe('POST /shares', function () {
 

@@ -6,27 +6,39 @@ var mongoose = require('mongoose');
 
 describe('Shares', function () {
 
-  before(function (done) {
-    //Another possibility is to check if mongoose.connection.readyState equals 1
-    if (mongoose.connection.db) return done();
-    mongoose.connect('mongodb://localhost/test', done);
-  });
+	var data = {
+		'provider': 'twitter',
+		'link': 'http://somewhere.com',
+		'editor': 'pietgeursen',
+		'created_at': 'now'
+	};
 
-  describe('Share#add', function (done) {
+	before(function (done) {
+		if (mongoose.connection.readyState) {
+			return done();
+		} else {
+			mongoose.connect('mongodb://localhost/test', done);
+		}
+	});
 
-    it('creates a new share in the database', function (done) {
+	describe('Share#add', function () {
 
-      done();
-    });
+		it('creates a new share in the database', function (done) {
+			share.add(data).spread(function (saved_share) {
+				done();
+			});
+		});
 
-    it('throws an error with incorrect params', function (done) {
-      done();
-    });
-  });
+		it('throws an error with incorrect params', function (done) {
+			share.add({})['catch'](function (error) {
+				done();
+			});
+		});
+	});
 
-  after(function (done) {
-    mongoose.connection.close(function () {
-      done();
-    });
-  });
+	after(function (done) {
+		mongoose.connection.close(function () {
+			done();
+		});
+	});
 });
