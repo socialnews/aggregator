@@ -37,8 +37,12 @@ describe('Shares', function () {
 	});
 
 	after(function (done) {
-		mongoose.connection.close(function () {
-			done();
+		mongoose.connection.collections['shares'].drop(function (err) {
+			if (err) console.log('Got error trying to drop shares: ', err);
+
+			mongoose.connection.close(function () {
+				done();
+			});
 		});
 	});
 });

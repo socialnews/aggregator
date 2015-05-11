@@ -39,9 +39,15 @@ describe('Shares', () =>{
 	})
 
 	after( done =>{
-		mongoose.connection.close( () => {
-			done();
-		})
+		mongoose.connection.collections['shares'].drop( (err) => {
+			if(err) console.log("Got error trying to drop shares: ", err);
+			
+		    mongoose.connection.close( () => {
+		    	done();
+		    })
+		});
+
+
 	})
 
 
