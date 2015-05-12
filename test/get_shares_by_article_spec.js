@@ -29,7 +29,7 @@ describe('GET /article?url=some-urlencoded-url', function () {
     getShareByArticle().expect(200, done);
   });
 
-  it('expects a query string where {url: encoded_url} ', function (done) {
+  it('decodes a url encoded query string', function (done) {
     var getByArticleSpy = simple.mock(share, 'getByArticle').resolveWith([data]);
 
     getShareByArticle().expect(200, function () {

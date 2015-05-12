@@ -1,18 +1,26 @@
 'use strict';
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
 var should = require('should');
 var share = require('../db/share.js');
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
 
-describe('Shares', function () {
+var moment = require('moment');
+var faker = require('faker');
 
-	var data = {
-		'provider': 'twitter',
-		'link': 'http://somewhere.com',
-		'editor': 'pietgeursen',
-		'created_at': 'now'
+describe('Shares', function () {
+	var FakeShare = function FakeShare() {
+		_classCallCheck(this, FakeShare);
+
+		this.provider = 'twitter';
+		this.link = faker.internet.domainName();
+		this.editor = faker.internet.userName();
+		this.created_at = moment().format();
 	};
+
+	var data = new FakeShare();
 
 	before(function (done) {
 		if (mongoose.connection.readyState) {
@@ -46,7 +54,7 @@ describe('Shares', function () {
 					saved_share.link.should.be.equal(shares.link);
 					saved_share.provider.should.be.equal(shares.provider);
 					saved_share.editor.should.be.equal(shares.editor);
-					saved_share.created_at.should.be.equal(shares.created_at);
+					saved_share.created_at.should.be.eql(shares.created_at);
 					done();
 				});
 			});
@@ -62,6 +70,30 @@ describe('Shares', function () {
 				return share.getByArticle(data.link);
 			}).then(function (loadedShares) {
 				loadedShares.length.should.be.equal(shares.length);
+				done();
+			});
+		});
+
+		it('returns shares sorted by time ', function (done) {
+
+			var newest = new FakeShare();
+			var oldest = new FakeShare();
+			var middleAged = new FakeShare();
+
+			newest.link = oldest.link = middleAged.link;
+			oldest.created_at = moment().subtract(2, 'days').format();
+			middleAged.created_at = moment().subtract(1, 'days').format();
+
+			var shares = [middleAged, newest, oldest];
+
+			Promise.map(shares, function (data) {
+				return share.add(data);
+			}).then(function (savedShares) {
+				return share.getByArticle(newest.link);
+			}).then(function (loadedShares) {
+				loadedShares.length.should.be.equal(shares.length);
+				should.ok(moment(loadedShares[0].created_at).isBefore(loadedShares[1].created_at));
+				should.ok(moment(loadedShares[1].created_at).isBefore(loadedShares[2].created_at));
 				done();
 			});
 		});

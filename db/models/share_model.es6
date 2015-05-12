@@ -18,7 +18,7 @@ let ShareSchema = new Schema({
 		required: 'links must not be blank'
 	},
 	created_at: {
-		type: String,
+		type: Date,
 		required: 'created_at must not be blank'
 	}
 

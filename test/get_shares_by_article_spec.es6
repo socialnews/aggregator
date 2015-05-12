@@ -34,7 +34,7 @@ describe('GET /article?url=some-urlencoded-url', () =>{
       .expect(200, done);
   })
 
-  it('expects a query string where {url: encoded_url} ', (done) =>{
+  it('decodes a url encoded query string', (done) =>{
     let getByArticleSpy = simple.mock(share, 'getByArticle').resolveWith([data]);
     
     getShareByArticle()
@@ -43,6 +43,8 @@ describe('GET /article?url=some-urlencoded-url', () =>{
         done();
       });
   })
+
+  
 
   after( done =>{
     simple.restore();

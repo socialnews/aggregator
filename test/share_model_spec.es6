@@ -3,16 +3,25 @@ let share = require('../db/share.js');
 let mongoose = require('mongoose');
 let Promise = require('bluebird');
 
+let moment = require('moment');
+let faker = require('faker');
+
 
 
 describe('Shares', () =>{
 
-	let data = {
-		'provider': 'twitter',
-		'link' : 'http://somewhere.com',
-		'editor' : 'pietgeursen',
-		'created_at': 'now'
+	class FakeShare {
+
+		constructor(){
+
+			this.provider = 'twitter'
+			this.link  = faker.internet.domainName()
+			this.editor  = faker.internet.userName()
+			this.created_at = moment().format()				
+		}
 	}
+
+	let data = new FakeShare()
 
 	before((done) => {
 		if (mongoose.connection.readyState){ 
@@ -50,7 +59,7 @@ describe('Shares', () =>{
 					(saved_share.link).should.be.equal(shares.link);
 					(saved_share.provider).should.be.equal(shares.provider);
 					(saved_share.editor).should.be.equal(shares.editor);
-					(saved_share.created_at).should.be.equal(shares.created_at);
+					(saved_share.created_at).should.be.eql(shares.created_at);
 					done();
 				})
 			})
@@ -67,6 +76,36 @@ describe('Shares', () =>{
 				
 			}).then((loadedShares) => {
 				(loadedShares.length).should.be.equal(shares.length);
+				done();
+			})
+		})
+
+
+		it('returns shares sorted by time ',  (done) => {
+
+			let newest = new FakeShare()
+			let oldest = new FakeShare()
+			let middleAged = new FakeShare()
+			
+			newest.link = oldest.link = middleAged.link;
+			oldest.created_at = moment().subtract(2,'days').format()
+			middleAged.created_at = moment().subtract(1,'days').format()
+
+			let shares = [
+				middleAged,
+				newest,
+				oldest
+				];	
+
+			Promise.map(shares, (data) =>{
+				return share.add(data)
+			}).then((savedShares)=>{
+				return share.getByArticle(newest.link)
+				
+			}).then((loadedShares) => {
+				(loadedShares.length).should.be.equal(shares.length);
+				should.ok(moment(loadedShares[0].created_at).isBefore(loadedShares[1].created_at))
+				should.ok(moment(loadedShares[1].created_at).isBefore(loadedShares[2].created_at))
 				done();
 			})
 		})

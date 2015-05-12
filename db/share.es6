@@ -3,6 +3,9 @@ let mongoose = require('mongoose');
 let mongo = BBPromise.promisifyAll(require('mongodb'));
 let MongoClient = mongo.MongoClient;
 
+BBPromise.promisifyAll(mongoose);
+
+
 let shareSchema = require('./models/share_model').model;
 
 let addShare = (share) => {
@@ -13,7 +16,7 @@ let addShare = (share) => {
 
 let getByArticle = (article) => {
 	return mongoose.model('Share')
-		.findAsync({link: article});
+		.find({link: article}).sort({created_at: 1}).execAsync();
 }
 
 module.exports.add = addShare;
