@@ -3,15 +3,15 @@ let router = express.Router();
 let share = require('../db/share.js');
 let mongoose = require('mongoose');
 
+router.get('/', (req, res) =>{
 
-router.post('/', (req, res) =>{
+	let url = decodeURIComponent(req.query.url);
 
-	share.add(req.body)
-		.then((saved_share) => {
-			res.json(saved_share);
+	share.getByArticle(url)
+		.then((shares) => {
+			res.json(shares);
 		})
 		.catch((error) => {
-
 			res.status(400);
 			res.json({error: error});
 		})
