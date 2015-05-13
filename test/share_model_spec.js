@@ -114,4 +114,3 @@ describe('Shares', function () {
 		});
 	});
 });
-
