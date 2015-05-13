@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var express = require('express');
 var shares = require('./routes/shares.js');
+var article = require('./routes/article.js');
 var app = express();
 
 var url = 'mongodb://localhost/test';
@@ -12,6 +13,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // for parsing application/json
 
 app.use('/shares', shares);
+app.use('/article', article);
 
 var server = app.listen(3000, function () {
 

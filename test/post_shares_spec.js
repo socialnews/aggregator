@@ -16,24 +16,25 @@ describe('POST /shares', function () {
     'created_at': 'now'
   };
 
-  var addSpy = undefined;
+  var postToShares = function postToShares() {
+    return request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/);
+  };
 
-  it('respond with json', function (done) {
-    addSpy = simple.mock(share, 'add').resolveWith([data]);
-    request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/).expect(200, done);
+  it('responds with json', function (done) {
+    var addSpy = simple.mock(share, 'add').resolveWith([data]);
+    postToShares().expect(200, done);
   });
 
   it('accepts a json request with params of provider, link, editor, shared_at', function (done) {
-    addSpy = simple.mock(share, 'add').resolveWith([data]);
-    request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/).expect(200, done);
+    var addSpy = simple.mock(share, 'add').resolveWith([data]);
+    postToShares().expect(200, done);
   });
 
   it('rejects a json request with incorrect params', function (done) {
     var data = {
       'provider': 'twitter' };
-    //Even though this uses a 'resolve', a single argument will be handled as an error. An array ends up being a success  
-    addSpy = simple.mock(share, 'add').resolveWith('error');
-    request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/).expect(400, done);
+    var addSpy = simple.mock(share, 'add').rejectWith('error');
+    postToShares().expect(400, done);
   });
 
   after(function (done) {
