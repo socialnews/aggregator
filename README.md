@@ -1,1 +1,4 @@
 # aggregator
+
+## Testing:
+npm test
