@@ -24,5 +24,9 @@
   "devDependencies": {
     "should": "^6.0.1",
     "supertest": "^0.15.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "find test/*.js  -exec mocha '{}' \\;"
   }
 }

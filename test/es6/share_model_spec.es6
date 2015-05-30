@@ -121,7 +121,7 @@ describe('Shares', () =>{
 		mongoose.connection.collections['shares'].drop( (err) => {
 		
 			mongoose.connection.close( () => {
-				done();
+				done();				
 			})
 		});
 	})
