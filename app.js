@@ -10,18 +10,20 @@ var nconf = require('nconf');
 var url = 'mongodb://localhost/test';
 
 var bodyParser = require('body-parser');
+var port = process.argv[2];
+port = port ? port : 3000;
 
 app.use(bodyParser.json()); // for parsing application/json
 
 app.use('/shares', shares);
 app.use('/article', article);
 
-var server = app.listen(3000, function () {
+var server = app.listen(port, function () {
 
   var host = server.address().address;
   var port = server.address().port;
 
-  console.log('Example app listening at http://%s:%s', host, port);
+  console.log('Aggregator listening at http://%s:%s', host, port);
 });
 
 if (!mongoose.connection.db) {
@@ -31,7 +33,7 @@ if (!mongoose.connection.db) {
 
 var gracefulExit = function gracefulExit() {
   mongoose.connection.close(function () {
-    console.log('Mongoose default connection with DB is disconnected through app termination');
+    console.log('Mongoose connection with DB is disconnected through app termination');
     process.exit(0);
   });
 };
