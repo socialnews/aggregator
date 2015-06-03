@@ -41,6 +41,12 @@ describe('GET /shares/editor_id', () =>{
       });
   })
 
+  it('Returns 400 with a bad query', (done) =>{
+    let getByEditorSpy = simple.mock(share, 'getByEditor').rejectWith('error');
+    getShareByEditor()
+      .expect(400, done) 
+  })
+
   after( done =>{
     simple.restore();
     server.close();

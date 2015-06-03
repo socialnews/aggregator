@@ -36,6 +36,11 @@ describe('GET /shares/editor_id', function () {
     });
   });
 
+  it('Returns 400 with a bad query', function (done) {
+    var getByEditorSpy = simple.mock(share, 'getByEditor').rejectWith('error');
+    getShareByEditor().expect(400, done);
+  });
+
   after(function (done) {
     simple.restore();
     server.close();
