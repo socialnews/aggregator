@@ -3,7 +3,6 @@
 var request = require('supertest');
 var should = require('should');
 var app = require('../app.js').app;
-var server = require('../app.js').server;
 
 var simple = require('simple-mock');
 var share = require('../db/share.js');
@@ -43,7 +42,6 @@ describe('GET /shares?editor=some-editor-name', function () {
 
   after(function (done) {
     simple.restore();
-    server.close();
     done();
   });
 });

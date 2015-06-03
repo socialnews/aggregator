@@ -18,28 +18,31 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use('/shares', shares);
 app.use('/article', article);
 
-var server = app.listen(port, function () {
+var start = function start(port) {
 
-  var host = server.address().address;
-  var port = server.address().port;
+	return app.listen(port, function () {
 
-  console.log('Aggregator listening at http://%s:%s', host, port);
-});
+		var host = server.address().address;
+		var port = server.address().port;
+
+		console.log('Aggregator listening at http://%s:%s', host, port);
+	});
+};
 
 if (!mongoose.connection.db) {
-  console.log('connecting to db...');
-  mongoose.connect(url);
+	console.log('connecting to db...');
+	mongoose.connect(url);
 }
 
 var gracefulExit = function gracefulExit() {
-  mongoose.connection.close(function () {
-    console.log('Mongoose connection with DB is disconnected through app termination');
-    process.exit(0);
-  });
+	mongoose.connection.close(function () {
+		console.log('Mongoose connection with DB is disconnected through app termination');
+		process.exit(0);
+	});
 };
 
 // If the Node process ends, close the Mongoose connection
 process.on('SIGINT', gracefulExit).on('SIGTERM', gracefulExit);
 
 exports.app = app;
-exports.server = server;
+exports.start = start(port);

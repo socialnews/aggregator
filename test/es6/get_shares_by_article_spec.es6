@@ -1,7 +1,6 @@
 let request = require('supertest');
 let should = require('should');
 let app = require('../app.js').app;
-let server = require('../app.js').server;
 
 
 let simple = require('simple-mock');
@@ -49,7 +48,6 @@ describe('GET /article?url=some-urlencoded-url', () =>{
 
   after( done =>{
     simple.restore();
-    server.close();
     done();
   })
 })
