@@ -45,6 +45,60 @@ describe('Shares', function () {
 		});
 	});
 
+	describe('Share#getByEditor', function () {
+
+		it('finds a share by editor', function (done) {
+			share.add(data).then(function (saved_share) {
+				share.getByEditor(data.editor).spread(function (shares) {
+
+					saved_share.link.should.be.equal(shares.link);
+					saved_share.provider.should.be.equal(shares.provider);
+					saved_share.editor.should.be.equal(shares.editor);
+					saved_share.created_at.should.be.eql(shares.created_at);
+					done();
+				});
+			});
+		});
+
+		it('finds a collection of shares by editor', function (done) {
+
+			var shares = [data, data, data];
+
+			Promise.map(shares, function (data) {
+				return share.add(data);
+			}).then(function (savedShares) {
+				return share.getByEditor(data.editor);
+			}).then(function (loadedShares) {
+				loadedShares.length.should.be.equal(shares.length);
+				done();
+			});
+		});
+
+		it('returns shares sorted by time ', function (done) {
+
+			var newest = new FakeShare();
+			var oldest = new FakeShare();
+			var middleAged = new FakeShare();
+
+			newest.editor = oldest.editor = middleAged.editor;
+			oldest.created_at = moment().subtract(2, 'days').format();
+			middleAged.created_at = moment().subtract(1, 'days').format();
+
+			var shares = [middleAged, newest, oldest];
+
+			Promise.map(shares, function (data) {
+				return share.add(data);
+			}).then(function (savedShares) {
+				return share.getByEditor(newest.editor);
+			}).then(function (loadedShares) {
+				loadedShares.length.should.be.equal(shares.length);
+				should.ok(moment(loadedShares[0].created_at).isBefore(loadedShares[1].created_at));
+				should.ok(moment(loadedShares[1].created_at).isBefore(loadedShares[2].created_at));
+				done();
+			});
+		});
+	});
+
 	describe('Share#getByArticle', function () {
 
 		it('finds a share by article', function (done) {
