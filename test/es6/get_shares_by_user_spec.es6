@@ -7,7 +7,7 @@ let server = require('../app.js').server;
 let simple = require('simple-mock');
 let share = require('../db/share.js');
 
-describe('GET /shares/editor_id', () =>{
+describe('GET /shares?editor=some-editor-name', () =>{
 
   let data = {
     'provider': 'twitter',

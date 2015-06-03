@@ -20,7 +20,6 @@ router.post('/', (req, res) =>{
 
 router.get('/', (req, res) =>{
 	let editor = req.query.editor
-	console.log(editor)
 	share.getByEditor(editor)
 		.then((share) => {
 			res.json(share);

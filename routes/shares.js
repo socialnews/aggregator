@@ -18,7 +18,6 @@ router.post('/', function (req, res) {
 
 router.get('/', function (req, res) {
 	var editor = req.query.editor;
-	console.log(editor);
 	share.getByEditor(editor).then(function (share) {
 		res.json(share);
 	})['catch'](function (error) {
