@@ -4,7 +4,6 @@
   "description": "social news aggregator",
   "main": "index.js",
   "scripts": {
-    "run": "node app.js",
     "test": "find test/*.js  -exec mocha '{}' \\;"
   },
   "repository": {
