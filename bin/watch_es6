@@ -1,0 +1,10 @@
+#/bin/bash
+
+
+babel -w es6 --out-dir .
+
+session = "babel_builds"
+
+function createTmuxSession {
+	tmux new -s $session &
+}

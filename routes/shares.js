@@ -16,4 +16,14 @@ router.post('/', function (req, res) {
 	});
 });
 
+router.get('/', function (req, res) {
+	var editor = req.query.editor;
+	share.getByEditor(editor).then(function (share) {
+		res.json(share);
+	})['catch'](function (error) {
+		res.status(400);
+		res.json({ error: error });
+	});
+});
+
 module.exports = router;

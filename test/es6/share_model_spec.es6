@@ -6,8 +6,6 @@ let Promise = require('bluebird');
 let moment = require('moment');
 let faker = require('faker');
 
-
-
 describe('Shares', () =>{
 
 	class FakeShare {
@@ -17,14 +15,14 @@ describe('Shares', () =>{
 			this.provider = 'twitter'
 			this.link  = faker.internet.domainName()
 			this.editor  = faker.internet.userName()
-			this.created_at = moment().format()				
+			this.created_at = moment().format()
 		}
 	}
 
 	let data = new FakeShare()
 
 	before((done) => {
-		if (mongoose.connection.readyState){ 
+		if (mongoose.connection.readyState){
 			return done();
 		}else{
 			mongoose.connect('mongodb://localhost/test', done);
@@ -50,6 +48,66 @@ describe('Shares', () =>{
 	});
 
 
+	describe('Share#getByEditor',  () => {
+
+		it('finds a share by editor',  (done) => {
+			share.add(data).then( (saved_share) => {
+				share.getByEditor(data.editor).spread ((shares) =>{
+
+					(saved_share.link).should.be.equal(shares.link);
+					(saved_share.provider).should.be.equal(shares.provider);
+					(saved_share.editor).should.be.equal(shares.editor);
+					(saved_share.created_at).should.be.eql(shares.created_at);
+					done();
+				})
+			})
+		})
+
+		it('finds a collection of shares by editor',  (done) => {
+
+			let shares = [data,data,data];
+
+			Promise.map(shares, (data) =>{
+				return share.add(data)
+			}).then((savedShares)=>{
+				return share.getByEditor(data.editor)
+			}).then((loadedShares) => {
+				(loadedShares.length).should.be.equal(shares.length);
+				done();
+			})
+		})
+
+
+		it('returns shares sorted by time ',  (done) => {
+
+			let newest = new FakeShare()
+			let oldest = new FakeShare()
+			let middleAged = new FakeShare()
+			
+			newest.editor = oldest.editor = middleAged.editor;
+			oldest.created_at = moment().subtract(2,'days').format()
+			middleAged.created_at = moment().subtract(1,'days').format()
+
+			let shares = [
+				middleAged,
+				newest,
+				oldest
+				];	
+
+			Promise.map(shares, (data) =>{
+				return share.add(data)
+			}).then((savedShares)=>{
+				return share.getByEditor(newest.editor)
+				
+			}).then((loadedShares) => {
+				(loadedShares.length).should.be.equal(shares.length);
+				should.ok(moment(loadedShares[0].created_at).isBefore(loadedShares[1].created_at))
+				should.ok(moment(loadedShares[1].created_at).isBefore(loadedShares[2].created_at))
+				done();
+			})
+		})
+	})
+
 	describe('Share#getByArticle',  () => {
 
 		it('finds a share by article',  (done) => {
@@ -73,7 +131,6 @@ describe('Shares', () =>{
 				return share.add(data)
 			}).then((savedShares)=>{
 				return share.getByArticle(data.link)
-				
 			}).then((loadedShares) => {
 				(loadedShares.length).should.be.equal(shares.length);
 				done();
@@ -125,6 +182,5 @@ describe('Shares', () =>{
 			})
 		});
 	})
-
 
 })

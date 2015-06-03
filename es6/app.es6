@@ -3,6 +3,7 @@ let express = require('express');
 let shares = require('./routes/shares.js');
 let article = require('./routes/article.js');
 let app = express();
+let nconf = require('nconf');
 
 let url = 'mongodb://localhost/test'
 
