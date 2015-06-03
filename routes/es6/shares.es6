@@ -18,4 +18,19 @@ router.post('/', (req, res) =>{
 
 })
 
+router.get('/', (req, res) =>{
+	let editor = req.query.editor
+	console.log(editor)
+	share.getByEditor(editor)
+		.then((share) => {
+			res.json(share);
+		})
+		.catch((error) => {
+			res.status(400);
+			res.json({error: error});
+		})
+
+})
+
+
 module.exports = router;

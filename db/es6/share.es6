@@ -19,6 +19,13 @@ let getByArticle = (article) => {
 		.find({link: article}).sort({created_at: 1}).execAsync();
 }
 
+let getByEditor = (editor) => {
+	return mongoose.model('Share')
+		.find({editor: editor}).sort({created_at: 1}).execAsync();
+}
+
 module.exports.add = addShare;
 module.exports.getByArticle = getByArticle;
+module.exports.getByEditor = getByEditor;
+
 
