@@ -41,6 +41,12 @@ describe('GET /article?url=some-urlencoded-url', () =>{
       });
   })
 
+  it('rejects a bad query string', (done) =>{
+	let getByArticleSpy = simple.mock(share, 'getByArticle').rejectWith('error');
+    getShareByArticle()
+      .expect(400,done) 
+  })
+
   after( done =>{
     simple.restore();
     server.close();
