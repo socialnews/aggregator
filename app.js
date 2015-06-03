@@ -5,6 +5,7 @@ var express = require('express');
 var shares = require('./routes/shares.js');
 var article = require('./routes/article.js');
 var app = express();
+var nconf = require('nconf');
 
 var url = 'mongodb://localhost/test';
 

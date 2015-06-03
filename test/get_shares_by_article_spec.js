@@ -25,13 +25,11 @@ describe('GET /article?url=some-urlencoded-url', function () {
 
   it('responds with json', function (done) {
     var getByArticleSpy = simple.mock(share, 'getByArticle').resolveWith([data]);
-
     getShareByArticle().expect(200, done);
   });
 
   it('decodes a url encoded query string', function (done) {
     var getByArticleSpy = simple.mock(share, 'getByArticle').resolveWith([data]);
-
     getShareByArticle().expect(200, function () {
       getByArticleSpy.lastCall.args[0].should.be.eql(decodeURIComponent(query.url));
       done();
