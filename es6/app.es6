@@ -19,15 +19,13 @@ app.use('/article', article );
 
 let start = function(port){
 
-		 return app.listen(port,  () => {
+	let server = app.listen(port)
+	let host = server.address().address;
+	port = server.address().port;
 
-			let host = server.address().address;
-			let port = server.address().port;
-
-			console.log('Aggregator listening at http://%s:%s', host, port);
-
-		});
-	}
+	console.log('Aggregator listening at http://%s:%s', host, port);
+	return server;
+}
 
 if (!mongoose.connection.db) {
 	console.log('connecting to db...')
