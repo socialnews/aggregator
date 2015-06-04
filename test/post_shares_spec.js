@@ -2,7 +2,6 @@
 
 var request = require('supertest');
 var app = require('../app.js').app;
-var server = require('../app.js').server;
 
 var simple = require('simple-mock');
 var share = require('../db/share.js');
@@ -39,7 +38,6 @@ describe('POST /shares', function () {
 
   after(function (done) {
     simple.restore();
-    server.close();
     done();
   });
 });
