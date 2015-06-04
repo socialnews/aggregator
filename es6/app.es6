@@ -5,7 +5,6 @@ let article = require('./routes/article.js');
 let app = express();
 let nconf = require('nconf');
 
-let url = 'mongodb://localhost/test'
 
 let bodyParser = require('body-parser')
 let port = process.argv[2]
@@ -16,6 +15,10 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use('/shares', shares );
 app.use('/article', article );
 
+nconf.argv()
+	.file({ file: 'config.json' });
+
+let url = nconf.get('production').database.url
 
 let start = function(port){
 
@@ -24,12 +27,12 @@ let start = function(port){
 	port = server.address().port;
 
 	console.log('Aggregator listening at http://%s:%s', host, port);
-	return server;
-}
 
-if (!mongoose.connection.db) {
-	console.log('connecting to db...')
-  	mongoose.connect(url);
+	if (!mongoose.connection.db) {
+		console.log('connecting to db at %s', url)
+		mongoose.connect(url);
+	}
+	return server;
 }
 
 let gracefulExit = () => {
@@ -38,10 +41,8 @@ let gracefulExit = () => {
     process.exit(0);
   });
 }
-
 // If the Node process ends, close the Mongoose connection
 process.on('SIGINT', gracefulExit).on('SIGTERM', gracefulExit);
-
 
 exports.app = app;
 exports.start = start(port);
