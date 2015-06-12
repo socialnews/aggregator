@@ -16,7 +16,7 @@ describe('Shares', function () {
 
 		this.provider = 'twitter';
 		this.link = faker.internet.domainName();
-		this.editor = faker.internet.userName();
+		this.providerUserID = faker.internet.userName();
 		this.created_at = moment().format();
 	};
 
@@ -45,29 +45,29 @@ describe('Shares', function () {
 		});
 	});
 
-	describe('Share#getByEditor', function () {
+	describe('Share#getByproviderUserID', function () {
 
-		it('finds a share by editor', function (done) {
+		it('finds a share by providerUserID', function (done) {
 			share.add(data).then(function (saved_share) {
-				share.getByEditor(data.editor).spread(function (shares) {
+				share.getByUserID(data.providerUserID).spread(function (shares) {
 
 					saved_share.link.should.be.equal(shares.link);
 					saved_share.provider.should.be.equal(shares.provider);
-					saved_share.editor.should.be.equal(shares.editor);
+					saved_share.providerUserID.should.be.equal(shares.providerUserID);
 					saved_share.created_at.should.be.eql(shares.created_at);
 					done();
 				});
 			});
 		});
 
-		it('finds a collection of shares by editor', function (done) {
+		it('finds a collection of shares by user ID', function (done) {
 
 			var shares = [data, data, data];
 
 			Promise.map(shares, function (data) {
 				return share.add(data);
 			}).then(function (savedShares) {
-				return share.getByEditor(data.editor);
+				return share.getByUserID(data.providerUserID);
 			}).then(function (loadedShares) {
 				loadedShares.length.should.be.equal(shares.length);
 				done();
@@ -80,7 +80,7 @@ describe('Shares', function () {
 			var oldest = new FakeShare();
 			var middleAged = new FakeShare();
 
-			newest.editor = oldest.editor = middleAged.editor;
+			newest.providerUserID = oldest.providerUserID = middleAged.providerUserID;
 			oldest.created_at = moment().subtract(2, 'days').format();
 			middleAged.created_at = moment().subtract(1, 'days').format();
 
@@ -89,7 +89,7 @@ describe('Shares', function () {
 			Promise.map(shares, function (data) {
 				return share.add(data);
 			}).then(function (savedShares) {
-				return share.getByEditor(newest.editor);
+				return share.getByUserID(newest.providerUserID);
 			}).then(function (loadedShares) {
 				loadedShares.length.should.be.equal(shares.length);
 				should.ok(moment(loadedShares[0].created_at).isBefore(loadedShares[1].created_at));
@@ -107,7 +107,7 @@ describe('Shares', function () {
 
 					saved_share.link.should.be.equal(shares.link);
 					saved_share.provider.should.be.equal(shares.provider);
-					saved_share.editor.should.be.equal(shares.editor);
+					saved_share.providerUserID.should.be.equal(shares.providerUserID);
 					saved_share.created_at.should.be.eql(shares.created_at);
 					done();
 				});

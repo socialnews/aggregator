@@ -17,10 +17,15 @@ var getByArticle = function getByArticle(article) {
 	return mongoose.model('Share').find({ link: article }).sort({ created_at: 1 }).execAsync();
 };
 
-var getByEditor = function getByEditor(editor) {
-	return mongoose.model('Share').find({ editor: editor }).sort({ created_at: 1 }).execAsync();
+var getByUserID = function getByUserID(providerUserID) {
+	return mongoose.model('Share').find({ providerUserID: providerUserID }).sort({ created_at: 1 }).execAsync();
+};
+
+var destroyAll = function destroyAll() {
+	return mongoose.model('Share').removeAsync({});
 };
 
 module.exports.add = addShare;
 module.exports.getByArticle = getByArticle;
-module.exports.getByEditor = getByEditor;
+module.exports.getByUserID = getByUserID;
+module.exports.destroyAll = destroyAll;

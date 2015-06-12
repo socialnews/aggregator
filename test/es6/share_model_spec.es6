@@ -14,7 +14,7 @@ describe('Shares', () =>{
 
 			this.provider = 'twitter'
 			this.link  = faker.internet.domainName()
-			this.editor  = faker.internet.userName()
+			this.providerUserID  = faker.internet.userName()
 			this.created_at = moment().format()
 		}
 	}
@@ -48,29 +48,29 @@ describe('Shares', () =>{
 	});
 
 
-	describe('Share#getByEditor',  () => {
+	describe('Share#getByproviderUserID',  () => {
 
-		it('finds a share by editor',  (done) => {
+		it('finds a share by providerUserID',  (done) => {
 			share.add(data).then( (saved_share) => {
-				share.getByEditor(data.editor).spread ((shares) =>{
+				share.getByUserID(data.providerUserID).spread ((shares) =>{
 
 					(saved_share.link).should.be.equal(shares.link);
 					(saved_share.provider).should.be.equal(shares.provider);
-					(saved_share.editor).should.be.equal(shares.editor);
+					(saved_share.providerUserID).should.be.equal(shares.providerUserID);
 					(saved_share.created_at).should.be.eql(shares.created_at);
 					done();
 				})
 			})
 		})
 
-		it('finds a collection of shares by editor',  (done) => {
+		it('finds a collection of shares by user ID',  (done) => {
 
 			let shares = [data,data,data];
 
 			Promise.map(shares, (data) =>{
 				return share.add(data)
 			}).then((savedShares)=>{
-				return share.getByEditor(data.editor)
+				return share.getByUserID(data.providerUserID)
 			}).then((loadedShares) => {
 				(loadedShares.length).should.be.equal(shares.length);
 				done();
@@ -84,7 +84,7 @@ describe('Shares', () =>{
 			let oldest = new FakeShare()
 			let middleAged = new FakeShare()
 			
-			newest.editor = oldest.editor = middleAged.editor;
+			newest.providerUserID = oldest.providerUserID = middleAged.providerUserID;
 			oldest.created_at = moment().subtract(2,'days').format()
 			middleAged.created_at = moment().subtract(1,'days').format()
 
@@ -97,7 +97,7 @@ describe('Shares', () =>{
 			Promise.map(shares, (data) =>{
 				return share.add(data)
 			}).then((savedShares)=>{
-				return share.getByEditor(newest.editor)
+				return share.getByUserID(newest.providerUserID)
 				
 			}).then((loadedShares) => {
 				(loadedShares.length).should.be.equal(shares.length);
@@ -116,7 +116,7 @@ describe('Shares', () =>{
 
 					(saved_share.link).should.be.equal(shares.link);
 					(saved_share.provider).should.be.equal(shares.provider);
-					(saved_share.editor).should.be.equal(shares.editor);
+					(saved_share.providerUserID).should.be.equal(shares.providerUserID);
 					(saved_share.created_at).should.be.eql(shares.created_at);
 					done();
 				})

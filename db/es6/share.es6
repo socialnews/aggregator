@@ -13,19 +13,23 @@ let addShare = (share) => {
 		.createAsync(share);
 }
 
-
 let getByArticle = (article) => {
 	return mongoose.model('Share')
 		.find({link: article}).sort({created_at: 1}).execAsync();
 }
 
-let getByEditor = (editor) => {
+let getByUserID = (providerUserID) => {
 	return mongoose.model('Share')
-		.find({editor: editor}).sort({created_at: 1}).execAsync();
+		.find({providerUserID: providerUserID}).sort({created_at: 1}).execAsync();
+}
+
+let destroyAll = () => {
+	return mongoose.model('Share')
+		.removeAsync({});
 }
 
 module.exports.add = addShare;
 module.exports.getByArticle = getByArticle;
-module.exports.getByEditor = getByEditor;
-
+module.exports.getByUserID = getByUserID;
+module.exports.destroyAll = destroyAll;
 

@@ -5,9 +5,9 @@ let Schema = mongoose.Schema;
 let ShareSchema = new Schema({
 	schemaVersion: String,
 
-	editor: {
+	providerUserID: {
 		type: String,
-		required: 'Editors must have a name'
+		required: 'Must have a provider ID'
 	},
 	provider: {
 		type: String,

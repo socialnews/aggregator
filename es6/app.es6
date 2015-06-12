@@ -7,6 +7,7 @@ let nconf = require('nconf');
 
 
 let bodyParser = require('body-parser')
+let dbConn
 let port = process.argv[2]
 port =  port ? port : 3000
 
@@ -28,15 +29,13 @@ let start = function(port){
 
 	console.log('Aggregator listening at http://%s:%s', host, port);
 
-	if (!mongoose.connection.db) {
-		console.log('connecting to db at %s', url)
-		mongoose.connect(url);
-	}
+	console.log('connecting to db at %s', url)
+	dbConn = mongoose.createConnection(url);
 	return server;
 }
 
 let gracefulExit = () => {
-  mongoose.connection.close( () => {
+  dbConn.close( () => {
     console.log('Mongoose connection with DB is disconnected through app termination');
     process.exit(0);
   });

@@ -8,6 +8,7 @@ var app = express();
 var nconf = require('nconf');
 
 var bodyParser = require('body-parser');
+var dbConn = undefined;
 var port = process.argv[2];
 port = port ? port : 3000;
 
@@ -28,15 +29,13 @@ var start = function start(port) {
 
 	console.log('Aggregator listening at http://%s:%s', host, port);
 
-	if (!mongoose.connection.db) {
-		console.log('connecting to db at %s', url);
-		mongoose.connect(url);
-	}
+	console.log('connecting to db at %s', url);
+	dbConn = mongoose.createConnection(url);
 	return server;
 };
 
 var gracefulExit = function gracefulExit() {
-	mongoose.connection.close(function () {
+	dbConn.close(function () {
 		console.log('Mongoose connection with DB is disconnected through app termination');
 		process.exit(0);
 	});
