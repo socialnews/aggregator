@@ -19,8 +19,8 @@ router.post('/', (req, res) =>{
 })
 
 router.get('/', (req, res) =>{
-	let editor = req.query.editor
-	share.getByEditor(editor)
+	let providerUserID = req.query.providerUserID
+	share.getByUserID(providerUserID)
 		.then((share) => {
 			res.json(share);
 		})

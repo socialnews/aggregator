@@ -17,8 +17,8 @@ router.post('/', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-	var editor = req.query.editor;
-	share.getByEditor(editor).then(function (share) {
+	var providerUserID = req.query.providerUserID;
+	share.getByUserID(providerUserID).then(function (share) {
 		res.json(share);
 	})['catch'](function (error) {
 		res.status(400);

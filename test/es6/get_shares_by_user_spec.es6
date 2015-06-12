@@ -6,18 +6,18 @@ let app = require('../app.js').app;
 let simple = require('simple-mock');
 let share = require('../db/share.js');
 
-describe('GET /shares?editor=some-editor-name', () =>{
+describe('GET /shares?providerUserID=some-user-id', () =>{
 
   let data = {
     'provider': 'twitter',
     'link' : 'http://somewhere.com',
-    'editor' : 'pietgeursen',
+    'providerUserID' : 'pietgeursen',
     'created_at': 'now'
     }
 
-  let query = {editor: 'piet'}
+  let query = {providerUserID: 'piet'}
 
-  let getShareByEditor = () => {
+  let getShareByUserID = () => {
     return request(app)
       .get('/shares')
 	  .query(query)
@@ -26,23 +26,23 @@ describe('GET /shares?editor=some-editor-name', () =>{
   }
 
   it('responds with json', (done) =>{
-    let getByEditorSpy = simple.mock(share, 'getByEditor').resolveWith([data]);
-    getShareByEditor()
+    let getByUserIDSpy = simple.mock(share, 'getByUserID').resolveWith([data]);
+    getShareByUserID()
       .expect(200, done);
   })
 
   it('Returns 200 with a correct query', (done) =>{
-    let getByEditorSpy = simple.mock(share, 'getByEditor').resolveWith([data]);
-    getShareByEditor()
+    let getByUserIDSpy = simple.mock(share, 'getByUserID').resolveWith([data]);
+    getShareByUserID()
       .expect(200, () =>{
-        (getByEditorSpy.lastCall.args[0]).should.be.eql(query.editor);
+        (getByUserIDSpy.lastCall.args[0]).should.be.eql(query.providerUserID);
         done();
       });
   })
 
   it('Returns 400 with a bad query', (done) =>{
-    let getByEditorSpy = simple.mock(share, 'getByEditor').rejectWith('error');
-    getShareByEditor()
+    let getByUserIDSpy = simple.mock(share, 'getByUserID').rejectWith('error');
+    getShareByUserID()
       .expect(400, done) 
   })
 

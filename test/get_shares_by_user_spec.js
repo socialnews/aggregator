@@ -7,37 +7,37 @@ var app = require('../app.js').app;
 var simple = require('simple-mock');
 var share = require('../db/share.js');
 
-describe('GET /shares?editor=some-editor-name', function () {
+describe('GET /shares?providerUserID=some-user-id', function () {
 
   var data = {
     'provider': 'twitter',
     'link': 'http://somewhere.com',
-    'editor': 'pietgeursen',
+    'providerUserID': 'pietgeursen',
     'created_at': 'now'
   };
 
-  var query = { editor: 'piet' };
+  var query = { providerUserID: 'piet' };
 
-  var getShareByEditor = function getShareByEditor() {
+  var getShareByUserID = function getShareByUserID() {
     return request(app).get('/shares').query(query).set('Accept', 'application/json').expect('Content-Type', /json/);
   };
 
   it('responds with json', function (done) {
-    var getByEditorSpy = simple.mock(share, 'getByEditor').resolveWith([data]);
-    getShareByEditor().expect(200, done);
+    var getByUserIDSpy = simple.mock(share, 'getByUserID').resolveWith([data]);
+    getShareByUserID().expect(200, done);
   });
 
   it('Returns 200 with a correct query', function (done) {
-    var getByEditorSpy = simple.mock(share, 'getByEditor').resolveWith([data]);
-    getShareByEditor().expect(200, function () {
-      getByEditorSpy.lastCall.args[0].should.be.eql(query.editor);
+    var getByUserIDSpy = simple.mock(share, 'getByUserID').resolveWith([data]);
+    getShareByUserID().expect(200, function () {
+      getByUserIDSpy.lastCall.args[0].should.be.eql(query.providerUserID);
       done();
     });
   });
 
   it('Returns 400 with a bad query', function (done) {
-    var getByEditorSpy = simple.mock(share, 'getByEditor').rejectWith('error');
-    getShareByEditor().expect(400, done);
+    var getByUserIDSpy = simple.mock(share, 'getByUserID').rejectWith('error');
+    getShareByUserID().expect(400, done);
   });
 
   after(function (done) {
