@@ -4,7 +4,7 @@
   "description": "social news aggregator",
   "main": "index.js",
   "scripts": {
-    "test": "mocha $(ls $(pwd)/test/**/*-test.js)",
+    "test": "mocha $(ls $(pwd)/test/**_spec.js)",
     "vim-spec": "mocha $TEST"
   },
   "repository": {
