@@ -1,7 +1,12 @@
 #! /bin/bash
+red='\033[0;31m'
+green='\033[0;32m'
+normal='\033[0m'
+
 npm test > /dev/null
+
 if [[ $? == 1 ]]; then
-  echo "failing tests" 
+  printf "${red}failing tests${normal}\n" 
 else
-  echo "passed"
+  printf "${green}tests passed${normal}\n"
 fi
