@@ -1,5 +1,11 @@
 # aggregator
 
+## Install
+You will need node 0.12.2 or iojs 2.2.1 or greater
+```
+npm i
+```
+
 ## API Endpoints:
 Data store of all urls being shared, includes timestamp data of which users shared it and can answer questions like
 * POST /shares {provider: 'twitter', link: 'some-url', providerUserID: 'providerUserID', shared_at: timestamp} #add share to store
