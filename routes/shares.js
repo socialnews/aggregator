@@ -2,9 +2,28 @@
 
 var express = require('express');
 var router = express.Router();
+var share = require('../db/share.js');
+var mongoose = require('mongoose');
 
 router.post('/', function (req, res) {
-	res.json({ example: 'weee' });
+
+	share.add(req.body).then(function (saved_share) {
+		res.json(saved_share);
+	})['catch'](function (error) {
+
+		res.status(400);
+		res.json({ error: error });
+	});
+});
+
+router.get('/', function (req, res) {
+	var providerUserID = req.query.providerUserID;
+	share.getByUserID(providerUserID).then(function (share) {
+		res.json(share);
+	})['catch'](function (error) {
+		res.status(400);
+		res.json({ error: error });
+	});
 });
 
 module.exports = router;

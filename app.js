@@ -1,15 +1,47 @@
 'use strict';
 
+var mongoose = require('mongoose');
 var express = require('express');
 var shares = require('./routes/shares.js');
-var app = exports.app = express();
+var article = require('./routes/article.js');
+var app = express();
+var nconf = require('nconf');
+
+var bodyParser = require('body-parser');
+var dbConn = undefined;
+var port = process.argv[2];
+port = port ? port : 3000;
+
+app.use(bodyParser.json()); // for parsing application/json
 
 app.use('/shares', shares);
+app.use('/article', article);
 
-var server = app.listen(3000, function () {
+nconf.argv().file({ file: 'config.json' });
 
+var url = nconf.get('production').database.url;
+
+var start = function start(port) {
+
+	var server = app.listen(port);
 	var host = server.address().address;
-	var port = server.address().port;
+	port = server.address().port;
 
-	console.log('Example app listening at http://%s:%s', host, port);
-});
+	console.log('Aggregator listening at http://%s:%s', host, port);
+
+	console.log('connecting to db at %s', url);
+	dbConn = mongoose.createConnection(url);
+	return server;
+};
+
+var gracefulExit = function gracefulExit() {
+	dbConn.close(function () {
+		console.log('Mongoose connection with DB is disconnected through app termination');
+		process.exit(0);
+	});
+};
+// If the Node process ends, close the Mongoose connection
+process.on('SIGINT', gracefulExit).on('SIGTERM', gracefulExit);
+
+exports.app = app;
+exports.start = start(port);

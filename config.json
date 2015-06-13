@@ -1,0 +1,20 @@
+
+{
+	"production": {
+		"database": {
+			"url": "mongodb://localhost/aggregator"
+		}
+	},
+	"test": {
+		"database": {
+			"url": "mongodb://localhost/aggregator_test"
+		}
+
+		},
+	"dev": {
+		"database": {
+			"url": "mongodb://localhost/aggregator_dev"
+		}
+
+	}
+}
