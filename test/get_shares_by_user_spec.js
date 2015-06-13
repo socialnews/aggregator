@@ -22,6 +22,11 @@ describe('GET /shares?providerUserID=some-user-id', function () {
     return request(app).get('/shares').query(query).set('Accept', 'application/json').expect('Content-Type', /json/);
   };
 
+  afterEach(function (done) {
+    simple.restore();
+    done();
+  });
+
   it('responds with json', function (done) {
     var getByUserIDSpy = simple.mock(share, 'getByUserID').resolveWith([data]);
     getShareByUserID().expect(200, done);
@@ -38,10 +43,5 @@ describe('GET /shares?providerUserID=some-user-id', function () {
   it('Returns 400 with a bad query', function (done) {
     var getByUserIDSpy = simple.mock(share, 'getByUserID').rejectWith('error');
     getShareByUserID().expect(400, done);
-  });
-
-  after(function (done) {
-    simple.restore();
-    done();
   });
 });

@@ -22,6 +22,11 @@ describe('GET /article?url=some-urlencoded-url', function () {
     return request(app).get('/article').set('Accept', 'application/json').query(query).expect('Content-Type', /json/);
   };
 
+  afterEach(function (done) {
+    simple.restore();
+    done();
+  });
+
   it('responds with json', function (done) {
     var getByArticleSpy = simple.mock(share, 'getByArticle').resolveWith([data]);
     getShareByArticle().expect(200, done);
@@ -38,10 +43,5 @@ describe('GET /article?url=some-urlencoded-url', function () {
   it('rejects a bad query string', function (done) {
     var getByArticleSpy = simple.mock(share, 'getByArticle').rejectWith('error');
     getShareByArticle().expect(400, done);
-  });
-
-  after(function (done) {
-    simple.restore();
-    done();
   });
 });

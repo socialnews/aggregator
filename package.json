@@ -4,7 +4,8 @@
   "description": "social news aggregator",
   "main": "index.js",
   "scripts": {
-    "test": "find test/*.js  -exec mocha '{}' \\;"
+    "test": "mocha $(ls $(pwd)/test/**/*-test.js)",
+    "vim-spec": "mocha $TEST"
   },
   "repository": {
     "type": "git",

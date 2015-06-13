@@ -30,6 +30,12 @@ describe('Shares', function () {
 		}
 	});
 
+	afterEach(function (done) {
+		mongoose.connection.collections['shares'].drop(function (err) {
+			done();
+		});
+	});
+
 	describe('Share#add', function () {
 
 		it('creates a new share in the database', function (done) {
@@ -148,21 +154,6 @@ describe('Shares', function () {
 				loadedShares.length.should.be.equal(shares.length);
 				should.ok(moment(loadedShares[0].created_at).isBefore(loadedShares[1].created_at));
 				should.ok(moment(loadedShares[1].created_at).isBefore(loadedShares[2].created_at));
-				done();
-			});
-		});
-	});
-
-	afterEach(function (done) {
-		mongoose.connection.collections['shares'].drop(function (err) {
-			done();
-		});
-	});
-
-	after(function (done) {
-		mongoose.connection.collections['shares'].drop(function (err) {
-
-			mongoose.connection.close(function () {
 				done();
 			});
 		});

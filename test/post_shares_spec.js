@@ -19,6 +19,11 @@ describe('POST /shares', function () {
     return request(app).post('/shares').set('Accept', 'application/json').send(data).expect('Content-Type', /json/);
   };
 
+  afterEach(function (done) {
+    simple.restore();
+    done();
+  });
+
   it('responds with json', function (done) {
     var addSpy = simple.mock(share, 'add').resolveWith([data]);
     postToShares().expect(200, done);
@@ -34,10 +39,5 @@ describe('POST /shares', function () {
       'provider': 'twitter' };
     var addSpy = simple.mock(share, 'add').rejectWith('error');
     postToShares().expect(400, done);
-  });
-
-  after(function (done) {
-    simple.restore();
-    done();
   });
 });
